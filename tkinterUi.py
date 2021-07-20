@@ -1,5 +1,7 @@
+from sqlite3.dbapi2 import Error
 import tkinter as tk
-
+from sqliteDb import create_db_connection
+from sqliteDb import create_ram_db_connection
 
 class UiCreateApos(tk.Frame):
 
@@ -39,10 +41,17 @@ class UiCreateApos(tk.Frame):
         self.quit.pack(side='right')
 
     def storeApo(self):
-        print('work in progress..')
+        try:
+            apo_db = create_db_connection('./databases/apodatabase.db')
+            print('placeholder')
+            #apo_db.execute()
+            apo_db.commit()
+            apo_db.close()
+        except Error as err:
+            print('apo_db error: ', err)
 
 
-class UiInitKpis(tk.Frame):
+class UiSetKpiValues(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
@@ -58,17 +67,26 @@ class UiInitKpis(tk.Frame):
 
         self.button = tk.Button(self)
         self.button['text'] = 'create'
-        self.button['command'] = self.storeApo
+        self.button['command'] = self.setKpiValue
         self.button.pack()
 
         self.quit = tk.Button(self, text='close', fg='red', command=self.master.destroy)
         self.quit.pack(side='right')
 
-    def storeApo(self):
-        print('work in progress..')
+    def setKpiValue(self):
+        try:
+            print(self)
+            kpi_db = create_ram_db_connection()
+            print('work in progress.. store kpi value')
+            #kpi_db.execute()
+            kpi_db.commit()
+            kpi_db.close()
+        except Error as err:
+            print('kpi_db error: ', err)
+        
 
 
-class UiMainWindow(tk.Frame):
+class MonitorKpis(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
@@ -79,14 +97,34 @@ class UiMainWindow(tk.Frame):
         self.label = tk.Label(self, text='Main window')
         self.label.pack()
         
+        self.quit = tk.Button(self, text='close', fg='red', command=self.master.destroy)
+        self.quit.pack(side='right')
+
+
+class UiMainWindow(tk.Frame):
+
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.pack()
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.label = tk.Label(self, text='--------- Main window ---------\n')
+        self.label.pack()
+        
         self.button = tk.Button(self)
         self.button['text'] = 'create autonomous process'
         self.button['command'] = self.createApo
         self.button.pack()
 
         self.button = tk.Button(self)
-        self.button['text'] = 'initialize kpi values'
-        self.button['command'] = self.initKpis
+        self.button['text'] = 'initialize KPI values'
+        self.button['command'] = self.setKpiValues
+        self.button.pack()
+
+        self.button = tk.Button(self)
+        self.button['text'] = 'monitor KPI\'s'
+        self.button['command'] = self.monitorKpis
         self.button.pack()
 
         self.quit = tk.Button(self, text='close', fg='red', command=self.master.destroy)
@@ -97,12 +135,12 @@ class UiMainWindow(tk.Frame):
         app = UiCreateApos(master=root)
         app.mainloop()
 
-    def initKpis(self):
+    def setKpiValues(self):
         root = tk.Tk()
-        app = UiInitKpis(master=root)
+        app = UiSetKpiValues(master=root)
         app.mainloop()
 
-root = tk.Tk()
-app = UiMainWindow(master=root)
-app.mainloop()
-app.mainloop()
+    def monitorKpis(self):
+        root = tk.Tk()
+        app = MonitorKpis(master=root)
+        app.mainloop()
