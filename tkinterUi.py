@@ -1,7 +1,9 @@
 from sqlite3.dbapi2 import Error
 import tkinter as tk
-from sqliteDb import create_db_connection
-from sqliteDb import create_ram_db_connection
+from apoClass import autonomousProcessObject
+from sqliteFunctions import create_db_connection
+from sqliteFunctions import create_ram_db_connection
+from sqliteFunctions import write_apo_to_db
 
 class UiCreateApos(tk.Frame):
 
@@ -29,8 +31,8 @@ class UiCreateApos(tk.Frame):
 
         self.label = tk.Label(self, text='execution rule\n"kpi01 and kpi02"')
         self.label.pack()
-        self.entryExecrule = tk.Entry(self)
-        self.entryExecrule.pack()
+        self.entryExecRule = tk.Entry(self)
+        self.entryExecRule.pack()
 
         self.button = tk.Button(self)
         self.button['text'] = 'create'
@@ -42,11 +44,13 @@ class UiCreateApos(tk.Frame):
 
     def storeApo(self):
         try:
-            apo_db = create_db_connection('./databases/apodatabase.db')
-            print('placeholder')
-            #apo_db.execute()
-            apo_db.commit()
-            apo_db.close()
+            name = self.entryName.get()
+            kpis = self.entryKpis.get()
+            conds = self.entryConditions.get()
+            execRule = self.entryExecRule.get()
+            apo = autonomousProcessObject(name, kpis, conds, execRule)
+            write_apo_to_db('testtable', apo.name, apo.id, apo.kpis, apo.conditions, apo.executionRule)
+            
         except Error as err:
             print('apo_db error: ', err)
 

@@ -21,7 +21,7 @@ def createId():
     charArray = 'abcdefghijklmnopqrstuvwxyz'
     for i in range(5):
         id += charArray[random.randint(0, len(charArray)-1)]
-    id +=  '-' + str(time.time())
+    id +=  '_' + str(time.time())[:9]
     return id
 
 
