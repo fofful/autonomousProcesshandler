@@ -24,6 +24,8 @@ def main():
         app.mainloop()
     except Error as err:
         print(err)
+    finally:
+        print('app closed')
 
 if __name__ == '__main__':
     main()

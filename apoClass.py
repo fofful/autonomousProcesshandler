@@ -7,7 +7,6 @@ random.seed(None)
 class autonomousProcessObject:
     
     def __init__(self, name_, kpis_, conditions_, executionRule_):
-        
         self.name = name_
         self.id = createId()
         self.kpis = kpis_
@@ -16,7 +15,6 @@ class autonomousProcessObject:
 
 
 def createId():
-    
     id = ""
     charArray = 'abcdefghijklmnopqrstuvwxyz'
     for i in range(5):
@@ -26,11 +24,9 @@ def createId():
 
 
 def validateExecCondition(kpis_, executionRule_):
-
     tempExecutionRule = executionRule_
     booleanArray = ['and', 'or' ,';']
     charArray = ['(', ')']
-
     for kpi in kpis_:
         tempExecutionRule = tempExecutionRule.replace(kpi, '')
     for booleanTerm in booleanArray:

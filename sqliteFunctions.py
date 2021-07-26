@@ -21,21 +21,13 @@ def write_apo_to_db(table, name, id, kpis, conds, execRule):
         cur.execute(sql, params)
         apo_db.commit()
         print('autonomous process ', id, ' committed to table: ', table)
-
     except Error as err:
         print(err)
     finally:
         if apo_db:
             apo_db.close()
 
-def close_db_connection(db_file):
-    try:
-        db_file.close()
-    except Error as err:
-        print(err)
-
 def create_ram_db_connection():
-    """ create a database connection to a KPI value database"""
     try:
         ram_db = sqlite3.connect(':memory:')
     except Error as err:
@@ -44,15 +36,23 @@ def create_ram_db_connection():
         if ram_db:
             ram_db.close()
 
-def close_ram_connection(db_file):
-    try:
-        db_file.close()
-    except Error as err:
-        print(err)
-
 def create_table(apo_db, create_table_sql):
     try:
         cur = apo_db.cursor()
         cur.execute(create_table_sql)
     except Error as err:
         print(err)
+
+def printApos():
+    try:
+        apo_db = sqlite3.connect('./databases/apodatabase.db')
+        cur = apo_db.cursor()
+        cur.execute('SELECT * FROM testtable')
+        rows = cur.fetchall()
+        for row in rows:
+            print(row)
+    except Error as err:
+        print(err)
+    finally:
+        if apo_db:
+            apo_db.close()

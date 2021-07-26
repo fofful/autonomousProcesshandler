@@ -1,9 +1,11 @@
 from sqlite3.dbapi2 import Error
 import tkinter as tk
 from apoClass import autonomousProcessObject
-from sqliteFunctions import create_db_connection
 from sqliteFunctions import create_ram_db_connection
 from sqliteFunctions import write_apo_to_db
+from sqliteFunctions import printApos
+
+APOTABLE = 'testtable'
 
 class UiCreateApos(tk.Frame):
 
@@ -49,7 +51,7 @@ class UiCreateApos(tk.Frame):
             conds = self.entryConditions.get()
             execRule = self.entryExecRule.get()
             apo = autonomousProcessObject(name, kpis, conds, execRule)
-            write_apo_to_db('testtable', apo.name, apo.id, apo.kpis, apo.conditions, apo.executionRule)
+            write_apo_to_db(APOTABLE, apo.name, apo.id, apo.kpis, apo.conditions, apo.executionRule)
             
         except Error as err:
             print('apo_db error: ', err)
@@ -131,6 +133,11 @@ class UiMainWindow(tk.Frame):
         self.button['command'] = self.monitorKpis
         self.button.pack()
 
+        self.button = tk.Button(self)
+        self.button['text'] = 'print apo db'
+        self.button['command'] = self.printApoDatabase
+        self.button.pack()
+
         self.quit = tk.Button(self, text='close', fg='red', command=self.master.destroy)
         self.quit.pack(side='right')
 
@@ -148,3 +155,6 @@ class UiMainWindow(tk.Frame):
         root = tk.Tk()
         app = MonitorKpis(master=root)
         app.mainloop()
+    
+    def printApoDatabase(self):
+        printApos()
