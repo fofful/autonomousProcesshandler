@@ -1,8 +1,9 @@
 from sqlite3.dbapi2 import Error
 from tkinterUi import UiMainWindow
 import tkinter as tk
-from sqliteFunctions import create_db_connection
-from sqliteFunctions import create_ram_db_connection
+from sqliteFunctions import create_db_connection, create_ram_db_connection
+from autonomousExecutor import autonomousExecutorLoop
+import threading
 
 def main():
 
@@ -18,10 +19,12 @@ def main():
 
     try:
         create_db_connection(database, sql_create_projects_table)
-        create_ram_db_connection()
+        autonomousExecutorLoop()
         root = tk.Tk()
-        app = UiMainWindow(master=root)
-        app.mainloop()
+        task02 = UiMainWindow(master=root)
+        task02.mainloop()
+        
+
     except Error as err:
         print(err)
     finally:

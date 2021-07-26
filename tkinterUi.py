@@ -1,11 +1,12 @@
 from sqlite3.dbapi2 import Error
 import tkinter as tk
 from apoClass import autonomousProcessObject
-from sqliteFunctions import create_ram_db_connection
+from sqliteFunctions import create_ram_db_connection, write_kpi_to_db
 from sqliteFunctions import write_apo_to_db
 from sqliteFunctions import printApos
 
 APOTABLE = 'testtable'
+KPITABLE = create_ram_db_connection()
 
 class UiCreateApos(tk.Frame):
 
@@ -65,11 +66,15 @@ class UiSetKpiValues(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.label = tk.Label(self, text='name')
+        self.label = tk.Label(self, text='kpi name')
         self.label.pack()
-        
         self.entryName = tk.Entry(self)
         self.entryName.pack()
+
+        self.label = tk.Label(self, text='value')
+        self.label.pack()
+        self.entryValue = tk.Entry(self)
+        self.entryValue.pack()
 
         self.button = tk.Button(self)
         self.button['text'] = 'create'
@@ -81,16 +86,13 @@ class UiSetKpiValues(tk.Frame):
 
     def setKpiValue(self):
         try:
-            print(self)
-            kpi_db = create_ram_db_connection()
-            print('work in progress.. store kpi value')
-            #kpi_db.execute()
-            kpi_db.commit()
-            kpi_db.close()
+            kpi_db = KPITABLE
+            name = self.entryName.get()
+            value = self.entryValue.get()
+            write_kpi_to_db(kpi_db, name, value)
         except Error as err:
             print('kpi_db error: ', err)
         
-
 
 class MonitorKpis(tk.Frame):
 
