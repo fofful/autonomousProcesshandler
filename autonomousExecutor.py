@@ -1,5 +1,7 @@
 import threading
 import time
+from config import databaseAddress, KpiTable
+from sqliteFunctions import create_db_connection
 
 class autonomousExecutorThread(threading.Thread):
     def __init__(self):
@@ -13,4 +15,6 @@ class autonomousExecutorThread(threading.Thread):
         while self.running:
             print('kieno')
             time.sleep(2)
+
+
 

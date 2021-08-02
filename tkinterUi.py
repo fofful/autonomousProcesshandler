@@ -1,12 +1,9 @@
 from sqlite3.dbapi2 import Error
 import tkinter as tk
 from apoClass import autonomousProcessObject
-from sqliteFunctions import create_ram_db_connection, write_kpi_to_db
-from sqliteFunctions import write_apo_to_db
-from sqliteFunctions import printApos
-
-APOTABLE = 'testtable'
-KPITABLE = create_ram_db_connection()
+from sqliteFunctions import write_apo_to_db, write_kpi_to_db
+from sqliteFunctions import printApos, printKpis
+from config import apoTable, KpiTable
 
 class UiCreateApos(tk.Frame):
 
@@ -52,7 +49,7 @@ class UiCreateApos(tk.Frame):
             conds = self.entryConditions.get()
             execRule = self.entryExecRule.get()
             apo = autonomousProcessObject(name, kpis, conds, execRule)
-            write_apo_to_db(APOTABLE, apo.name, apo.id, apo.kpis, apo.conditions, apo.executionRule)
+            write_apo_to_db(apoTable(), apo.name, apo.id, apo.kpis, apo.conditions, apo.executionRule)
             
         except Error as err:
             print('apo_db error: ', err)
@@ -86,7 +83,7 @@ class UiSetKpiValues(tk.Frame):
 
     def setKpiValue(self):
         try:
-            kpi_db = KPITABLE
+            kpi_db = KpiTable()
             name = self.entryName.get()
             value = self.entryValue.get()
             write_kpi_to_db(kpi_db, name, value)
@@ -137,7 +134,7 @@ class UiMainWindow(tk.Frame):
 
         self.button = tk.Button(self)
         self.button['text'] = 'print apo db'
-        self.button['command'] = self.printApoDatabase
+        self.button['command'] = self.printApoTable
         self.button.pack()
 
         self.quit = tk.Button(self, text='close', fg='red', command=self.master.destroy)
@@ -158,5 +155,8 @@ class UiMainWindow(tk.Frame):
         app = MonitorKpis(master=root)
         app.mainloop()
     
-    def printApoDatabase(self):
-        printApos()
+    def printApoTable(self):
+        printApos(apoTable())
+
+    def printKpiTable(self):
+        printKpis(KpiTable())
