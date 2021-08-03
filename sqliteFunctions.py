@@ -50,14 +50,12 @@ def create_table_if_not_exist(table, variables):
                                         {variables}
                                     );'''.format(table=table, variables=variables)
 
-def printTable(table):
+def get_table_values(table):
     try:
         db = sqlite3.connect(databaseAddress())
         cur = db.cursor()
         cur.execute('SELECT * FROM {table}'.format(table=table))
-        rows = cur.fetchall()
-        for row in rows:
-            print(row)
+        return cur.fetchall()
     except Error as err:
         print(err)
     finally:

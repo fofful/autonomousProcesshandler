@@ -25,7 +25,7 @@ def createId():
 
 def validateExecCondition(kpis_, executionRule_):
     tempExecutionRule = executionRule_
-    booleanArray = ['and', 'or' ,';']
+    booleanArray = ['and', 'or' ,',']
     charArray = ['(', ')']
     for kpi in kpis_:
         tempExecutionRule = tempExecutionRule.replace(kpi, '')
