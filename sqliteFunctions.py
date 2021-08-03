@@ -23,7 +23,7 @@ def write_apo_to_db(table, name, id, kpis, conds, execRule):
         cur = db.cursor()
         cur.execute(sql, params)
         db.commit()
-        print('autonomous process: ', name,',\nid: ',id , '\ncommitted to table: ', table)
+        print('autonomous process name: ', name,'\nid: ',id , '\ncommitted to table: ', table)
     except Error as err:
         print(err)
     finally:
@@ -45,38 +45,12 @@ def write_kpi_to_db(table, name, value):
         if db:
             db.close()
 
-def create_apo_table_if_not_exist(table):
-
+def create_table_if_not_exist(table, variables):
     return '''CREATE TABLE IF NOT EXISTS {table} (
-                                        name text NOT NULL,
-                                        id text NOT NULL,
-                                        kpis text NOT NULL,
-                                        conditions text NOT NULL,
-                                        executionRule text NOT NULL
-                                    );'''.format(table=table)
+                                        {variables}
+                                    );'''.format(table=table, variables=variables)
 
-def create_kpi_table_if_not_exist(table):
-
-    return '''CREATE TABLE IF NOT EXISTS {table} (
-                                        name text NOT NULL,
-                                        value text NOT NULL
-                                    );'''.format(table=table)
-
-def printApos(table):
-    try:
-        db = sqlite3.connect(databaseAddress())
-        cur = db.cursor()
-        cur.execute('SELECT * FROM {table}'.format(table=table))
-        rows = cur.fetchall()
-        for row in rows:
-            print(row)
-    except Error as err:
-        print(err)
-    finally:
-        if db:
-            db.close()
-
-def printKpis(table):
+def printTable(table):
     try:
         db = sqlite3.connect(databaseAddress())
         cur = db.cursor()
