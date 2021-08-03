@@ -23,7 +23,7 @@ def write_apo_to_db(table, name, id, kpis, conds, execRule):
         cur = db.cursor()
         cur.execute(sql, params)
         db.commit()
-        print('autonomous process ', id, '\ncommitted to table: ', table)
+        print('autonomous process: ', name,',\nid: ',id , '\ncommitted to table: ', table)
     except Error as err:
         print(err)
     finally:

@@ -2,7 +2,7 @@ from sqlite3.dbapi2 import Error
 import tkinter as tk
 from apoClass import autonomousProcessObject
 from sqliteFunctions import write_apo_to_db, write_kpi_to_db
-from sqliteFunctions import printApos, printKpis
+from sqliteFunctions import printTable
 from config import apoTable, KpiTable
 
 class UiCreateApos(tk.Frame):
@@ -156,7 +156,7 @@ class UiMainWindow(tk.Frame):
         app.mainloop()
     
     def printApoTable(self):
-        printApos(apoTable())
+        printTable(apoTable())
 
     def printKpiTable(self):
-        printKpis(KpiTable())
+        printTable(KpiTable())
