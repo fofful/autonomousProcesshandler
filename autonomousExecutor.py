@@ -17,19 +17,24 @@ class autonomousExecutorThread(threading.Thread):
             aposTable = get_table_values(apoTable())
 
             for apo in aposTable:
-                print(apo[4])
-                execRule = apo[4]
-                execRule = execRule.replace(',', ' ')
                 kpiNames = apo[2].split(',')
-                for kpiName in kpiNames:
-                    execRule = execRule.replace(kpiName, '{' + kpiName + '}')
-                kpiConditions = apo[3].split(',')
-                for kpi in kpisTable:
-                    print('to be continued...')
+                kpiConditions = apo[3].split(',')            
+                kpiAndRuleArray = list(map(lambda kpi, rule: kpi + rule, kpiNames, kpiConditions))
+                execRule = apo[4]
+
+                for kpiAndRule in kpiAndRuleArray:
+                    for kpiValueTuple in kpisTable:
+                        if kpiValueTuple[0] in kpiAndRule:
+                            execRule = execRule.replace(kpiValueTuple[0], kpiAndRule)
+                            execRule = execRule.replace(kpiValueTuple[0], kpiValueTuple[1])
+                execRule = execRule.replace(',', ' ')  
+                print('kpiandrule: ', kpiAndRuleArray)
+                print('execRule: ', execRule)
+                print(apo[0], 'evaluates: ', eval(execRule))
 
                 
 
-            print(kpisTable)
+            #print(kpisTable)
             #print(aposTable)
             time.sleep(2)
 

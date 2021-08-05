@@ -28,7 +28,7 @@ class UiCreateApos(tk.Frame):
         self.entryConditions = tk.Entry(self)
         self.entryConditions.pack()
 
-        self.label = tk.Label(self, text='execution rule\n"kpi01 and kpi02"')
+        self.label = tk.Label(self, text='execution rule\n"kpi01,and,kpi02"')
         self.label.pack()
         self.entryExecRule = tk.Entry(self)
         self.entryExecRule.pack()
